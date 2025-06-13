@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 
@@ -59,15 +63,14 @@ variable "notification_email" {
   default     = "admin@example.com"
 }
 
-# S3 Bucket for Energy Data
-resource "aws_s3_bucket" "energy_data" {
-  bucket = "${var.bucket_name}-${random_suffix.bucket.result}"
+# Random ID for unique bucket naming
+resource "random_id" "bucket" {
+  byte_length = 4
 }
 
-resource "random_suffix" "bucket" {
-  length  = 8
-  special = false
-  upper   = false
+# S3 Bucket for Energy Data
+resource "aws_s3_bucket" "energy_data" {
+  bucket = "${var.bucket_name}-${random_id.bucket.hex}"
 }
 
 resource "aws_s3_bucket_versioning" "energy_data" {
@@ -99,7 +102,7 @@ resource "aws_s3_bucket_public_access_block" "energy_data" {
 # DynamoDB Table for Processed Energy Data
 resource "aws_dynamodb_table" "energy_data" {
   name           = var.dynamodb_table_name
-  billing_mode   = "ON_DEMAND"
+  billing_mode   = "PAY_PER_REQUEST"
   hash_key       = "site_id"
   range_key      = "timestamp"
 
