@@ -1,6 +1,6 @@
 from error_handling import PipelineErrorHandler, ErrorSeverity, ErrorType
 
-print('🧪 Testing Error Handling...')
+print(' Testing Error Handling...')
 handler = PipelineErrorHandler()
 
 # Create a fake error to test
@@ -15,5 +15,5 @@ except Exception as e:
         component='testing'
     )
 
-print('✅ Error handling test completed')
-print('📊 Error counts:', handler.error_counts)
+print('Error handling test completed')
+print('Error counts:', handler.error_counts)

@@ -1,6 +1,6 @@
 import os
 
-print('🧪 Terraform Validation Script')
+print('Terraform Validation Script')
 print('=' * 40)
 
 if os.path.exists('main.tf'):
@@ -16,30 +16,30 @@ if os.path.exists('main.tf'):
         'aws_sns_topic'
     ]
     
-    print('🧪 Terraform Resource Check:')
+    print('Terraform Resource Check:')
     for resource in required_resources:
         if resource in content:
-            print(f'✅ {resource}')
+            print(f'{resource}')
         else:
-            print(f'❌ {resource}')
+            print(f'{resource}')
             
-    print(f'\n📏 File size: {len(content)} characters')
+    print(f'\nFile size: {len(content)} characters')
     
     # Check for key sections
     key_sections = ['provider "aws"', 'variable', 'output']
-    print('\n🔧 Configuration Check:')
+    print('\nConfiguration Check:')
     for section in key_sections:
         if section in content:
-            print(f'✅ {section}')
+            print(f'{section}')
         else:
-            print(f'❌ {section}')
+            print(f'{section}')
 
-    print('\n📋 Summary:')
+    print('\nSummary:')
     if 'aws_s3_bucket' in content and 'aws_dynamodb_table' in content:
-        print('✅ Terraform file looks complete!')
+        print('Terraform file looks complete!')
     else:
-        print('❌ Terraform file missing key resources')
+        print('Terraform file missing key resources')
             
 else:
-    print('❌ main.tf not found')
-    print('📁 Current files:', os.listdir('.'))
+    print('main.tf not found')
+    print('Current files:', os.listdir('.'))

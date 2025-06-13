@@ -23,20 +23,20 @@ class ContinuousEnergyUploader:
         self.running = True
         self.upload_count = 0
         
-        # Set up graceful shutdown
+        # Set up shutdown
         signal.signal(signal.SIGINT, self.signal_handler)
         signal.signal(signal.SIGTERM, self.signal_handler)
         
     def signal_handler(self, signum, frame):
         """Handle shutdown signals gracefully"""
-        print(f"\n🛑 Received shutdown signal. Stopping after {self.upload_count} uploads...")
+        print(f"\n Received shutdown signal. Stopping after {self.upload_count} uploads...")
         self.running = False
         
     def generate_realistic_record(self, site_id: str, base_time: datetime.datetime) -> Dict:
         """Generate realistic energy record with time-based patterns"""
         hour = base_time.hour
         
-        # Realistic generation based on time of day (solar pattern)
+        # Realistic generation based on time of day 
         if 6 <= hour <= 18:  # Daylight hours
             base_generation = random.uniform(80, 200)
             # Peak around noon
@@ -55,7 +55,7 @@ class ContinuousEnergyUploader:
         generation *= random.uniform(0.8, 1.2)
         consumption *= random.uniform(0.9, 1.1)
         
-        # Occasionally inject anomalies (2% chance)
+        # Occasionally inject anomalies 
         if random.random() < 0.02:
             if random.random() < 0.5:
                 generation = -random.uniform(1, 10)  # Negative generation
@@ -73,7 +73,7 @@ class ContinuousEnergyUploader:
         """Generate batch of records for all sites at specific time"""
         records = []
         
-        # Generate 3-5 records per site for this time period
+        
         for site_id in self.sites:
             num_records = random.randint(3, 5)
             for i in range(num_records):
@@ -101,11 +101,11 @@ class ContinuousEnergyUploader:
             )
             
             self.upload_count += 1
-            print(f"✅ Upload #{self.upload_count}: {len(records)} records → s3://{self.bucket_name}/{file_key}")
+            print(f"Upload #{self.upload_count}: {len(records)} records → s3://{self.bucket_name}/{file_key}")
             return True
             
         except Exception as e:
-            print(f"❌ Upload failed: {e}")
+            print(f"Upload failed: {e}")
             return False
     
     def run_continuous(self, max_uploads: int = None):
@@ -115,13 +115,13 @@ class ContinuousEnergyUploader:
         Args:
             max_uploads: Maximum number of uploads (None for unlimited)
         """
-        print(f"🚀 Starting continuous energy data uploads...")
-        print(f"📊 Uploading every {self.interval_seconds // 60} minutes")
-        print(f"🏭 Monitoring {len(self.sites)} sites")
+        print(f"Starting continuous energy data uploads...")
+        print(f"Uploading every {self.interval_seconds // 60} minutes")
+        print(f"Monitoring {len(self.sites)} sites")
         if max_uploads:
-            print(f"🔢 Maximum uploads: {max_uploads}")
-        print(f"🛑 Press Ctrl+C to stop gracefully")
-        print(f"⏰ Started at: {datetime.datetime.utcnow().isoformat()}Z")
+            print(f"Maximum uploads: {max_uploads}")
+        print(f"Press Ctrl+C to stop gracefully")
+        print(f"Started at: {datetime.datetime.utcnow().isoformat()}Z")
         print("=" * 60)
         
         while self.running:
@@ -133,11 +133,11 @@ class ContinuousEnergyUploader:
                 success = self.upload_batch(records)
                 
                 if success:
-                    print(f"   📈 Next upload in {self.interval_seconds // 60} minutes at {(batch_time + datetime.timedelta(seconds=self.interval_seconds)).strftime('%H:%M:%S')}")
+                    print(f" Next upload in {self.interval_seconds // 60} minutes at {(batch_time + datetime.timedelta(seconds=self.interval_seconds)).strftime('%H:%M:%S')}")
                 
                 # Check if we've reached max uploads
                 if max_uploads and self.upload_count >= max_uploads:
-                    print(f"✅ Reached maximum uploads ({max_uploads}). Stopping...")
+                    print(f"Reached maximum uploads ({max_uploads}). Stopping...")
                     break
                 
                 # Wait for next interval
@@ -152,24 +152,24 @@ class ContinuousEnergyUploader:
             except KeyboardInterrupt:
                 self.running = False
             except Exception as e:
-                print(f"❌ Error in upload loop: {e}")
+                print(f"Error in upload loop: {e}")
                 time.sleep(10)  # Wait before retrying
         
-        print(f"\n🏁 Continuous uploader stopped after {self.upload_count} uploads")
-        print(f"🕐 Stopped at: {datetime.datetime.utcnow().isoformat()}Z")
+        print(f"\nContinuous uploader stopped after {self.upload_count} uploads")
+        print(f"Stopped at: {datetime.datetime.utcnow().isoformat()}Z")
 
 def main():
     """Main function with configuration"""
     # Configuration
-    BUCKET_NAME = "zeel-energy-data-2025"  # Your bucket name
+    BUCKET_NAME = "zeel-energy-data-2025"  # Bucket name
     INTERVAL_MINUTES = 5  # Upload every 5 minutes
     MAX_UPLOADS = 12  # Run for 1 hour (12 * 5 minutes) - set to None for unlimited
     
-    print("⚙️ CONTINUOUS ENERGY DATA UPLOADER")
+    print("CONTINUOUS ENERGY DATA UPLOADER")
     print("=" * 40)
-    print(f"🪣 Bucket: {BUCKET_NAME}")
-    print(f"⏱️ Interval: {INTERVAL_MINUTES} minutes")
-    print(f"🔢 Max uploads: {MAX_UPLOADS if MAX_UPLOADS else 'Unlimited'}")
+    print(f"Bucket: {BUCKET_NAME}")
+    print(f"Interval: {INTERVAL_MINUTES} minutes")
+    print(f"Max uploads: {MAX_UPLOADS if MAX_UPLOADS else 'Unlimited'}")
     print("=" * 40)
     
     # Create uploader

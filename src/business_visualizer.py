@@ -19,18 +19,18 @@ class EnergyBusinessVisualizer:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"❌ Error fetching {endpoint}: {e}")
+            print(f"Error fetching {endpoint}: {e}")
             return None
     
     def create_site_performance_comparison(self):
         """Create bar chart comparing site performance"""
-        print("📊 Creating Site Performance Comparison...")
+        print("Creating Site Performance Comparison...")
         
         # Fetch summary data
         summary_data = self.fetch_api_data("/summary")
         
         if not summary_data or 'site_summaries' not in summary_data:
-            print("❌ No summary data available")
+            print("No summary data available")
             return None
             
         sites = []
@@ -69,18 +69,18 @@ class EnergyBusinessVisualizer:
         # Save and show
         fig.write_html("site_performance_comparison.html")
         fig.show()
-        print("✅ Site performance chart saved as 'site_performance_comparison.html'")
+        print("Site performance chart saved as 'site_performance_comparison.html'")
         
         return fig
     
     def create_energy_efficiency_chart(self):
         """Create efficiency analysis chart"""
-        print("📊 Creating Energy Efficiency Analysis...")
+        print("Creating Energy Efficiency Analysis...")
         
         summary_data = self.fetch_api_data("/summary")
         
         if not summary_data or 'site_summaries' not in summary_data:
-            print("❌ No summary data available")
+            print("No summary data available")
             return None
             
         sites = []
@@ -135,19 +135,19 @@ class EnergyBusinessVisualizer:
         
         fig.write_html("energy_efficiency_analysis.html")
         fig.show()
-        print("✅ Energy efficiency chart saved as 'energy_efficiency_analysis.html'")
+        print("Energy efficiency chart saved as 'energy_efficiency_analysis.html'")
         
         return fig
     
     def create_anomaly_distribution_chart(self):
         """Create anomaly distribution visualization"""
-        print("📊 Creating Anomaly Distribution Analysis...")
+        print("Creating Anomaly Distribution Analysis...")
         
         # Get anomaly data for all sites
         all_anomalies = self.fetch_api_data("/anomalies")
         
         if not all_anomalies:
-            print("❌ No anomaly data available")
+            print("No anomaly data available")
             return None
         
         anomaly_count = all_anomalies.get('total_anomalies', 0)
@@ -191,18 +191,18 @@ class EnergyBusinessVisualizer:
         
         fig.write_html("anomaly_distribution.html")
         fig.show()
-        print("✅ Anomaly distribution chart saved as 'anomaly_distribution.html'")
+        print("Anomaly distribution chart saved as 'anomaly_distribution.html'")
         
         return fig
     
     def create_overall_summary_dashboard(self):
         """Create summary dashboard with key metrics"""
-        print("📊 Creating Overall Summary Dashboard...")
+        print("Creating Overall Summary Dashboard...")
         
         summary_data = self.fetch_api_data("/summary")
         
         if not summary_data:
-            print("❌ No summary data available")
+            print("No summary data available")
             return None
             
         overall_stats = summary_data.get('overall_statistics', {})
@@ -290,22 +290,22 @@ class EnergyBusinessVisualizer:
         
         fig.write_html("energy_dashboard.html")
         fig.show()
-        print("✅ Overall dashboard saved as 'energy_dashboard.html'")
+        print("Overall dashboard saved as 'energy_dashboard.html'")
         
         return fig
     
     def generate_all_business_visualizations(self):
         """Generate all business-focused visualizations"""
-        print("🚀 Generating Business-Focused Energy Visualizations...")
+        print("Generating Business-Focused Energy Visualizations...")
         print("=" * 60)
         
         # Check API health first
         health = self.fetch_api_data("/health")
         if not health or health.get('status') != 'healthy':
-            print("❌ API is not responding or unhealthy")
+            print("API is not responding or unhealthy")
             return
         
-        print("✅ API is healthy - proceeding with visualizations...")
+        print("API is healthy - proceeding with visualizations...")
         
         # Generate all visualizations
         viz_count = 0
@@ -323,13 +323,13 @@ class EnergyBusinessVisualizer:
             viz_count += 1
         
         print("=" * 60)
-        print(f"🎉 Generated {viz_count} business visualizations!")
-        print("📁 HTML files saved in your project directory:")
+        print(f"Generated {viz_count} business visualizations!")
+        print("HTML files saved in your project directory:")
         print("   • site_performance_comparison.html")
         print("   • energy_efficiency_analysis.html") 
         print("   • anomaly_distribution.html")
         print("   • energy_dashboard.html")
-        print("🌐 Open these files in your browser for interactive charts")
+        print("Open these files in your browser for interactive charts")
 
 def main():
     """Main function"""

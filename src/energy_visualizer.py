@@ -40,10 +40,10 @@ class EnergyDataVisualizer:
                 
                 records = self.convert_decimals(response['Items'])
                 all_data.extend(records)
-                print(f"✅ Fetched {len(records)} records for {site_id}")
+                print(f"Fetched {len(records)} records for {site_id}")
                 
             except Exception as e:
-                print(f"❌ Error fetching data for {site_id}: {e}")
+                print(f"Error fetching data for {site_id}: {e}")
         
         return all_data
     
@@ -68,7 +68,7 @@ class EnergyDataVisualizer:
     def create_site_comparison_chart(self, df):
         """Create bar chart comparing average performance by site"""
         if df.empty:
-            print("❌ No data available for site comparison")
+            print("No data available for site comparison")
             return None
             
         site_summary = df.groupby('site_id').agg({
@@ -99,7 +99,7 @@ class EnergyDataVisualizer:
     def create_time_series_chart(self, df):
         """Create time series chart showing energy trends"""
         if df.empty:
-            print("❌ No data available for time series")
+            print("No data available for time series")
             return None
             
         fig = make_subplots(
@@ -146,7 +146,7 @@ class EnergyDataVisualizer:
     def create_performance_heatmap(self, df):
         """Create heatmap showing performance by site and hour"""
         if df.empty:
-            print("❌ No data available for heatmap")
+            print("No data available for heatmap")
             return None
             
         # Group by site and hour
@@ -173,7 +173,7 @@ class EnergyDataVisualizer:
     def create_summary_stats(self, df):
         """Create summary statistics visualization"""
         if df.empty:
-            print("❌ No data available for summary stats")
+            print("No data available for summary stats")
             return None
             
         # Calculate summary statistics
@@ -184,7 +184,7 @@ class EnergyDataVisualizer:
             'anomaly': 'sum'
         }).round(2)
         
-        print("\n📊 ENERGY PERFORMANCE SUMMARY:")
+        print("\nENERGY PERFORMANCE SUMMARY:")
         print("=" * 50)
         for site in summary.index:
             print(f"\n🏭 {site}:")
@@ -197,52 +197,52 @@ class EnergyDataVisualizer:
     
     def generate_all_visualizations(self):
         """Generate all visualizations and save them"""
-        print("🚀 Starting Energy Data Visualization...")
+        print("Starting Energy Data Visualization...")
         
         # Fetch data
-        print("📊 Fetching data from DynamoDB...")
+        print("Fetching data from DynamoDB...")
         data = self.fetch_all_data()
         
         if not data:
-            print("❌ No data found in DynamoDB")
+            print("No data found in DynamoDB")
             return
             
-        print(f"✅ Fetched {len(data)} total records")
+        print(f"Fetched {len(data)} total records")
         
         # Create DataFrame
         df = self.create_dataframe(data)
-        print(f"✅ Created DataFrame with {len(df)} rows")
+        print(f"Created DataFrame with {len(df)} rows")
         
         # Generate summary statistics
         self.create_summary_stats(df)
         
         # Create and save visualizations
-        print("\n📈 Creating visualizations...")
+        print("\nCreating visualizations...")
         
         # 1. Site comparison chart
         fig1 = self.create_site_comparison_chart(df)
         if fig1:
             fig1.write_html("site_comparison.html")
             fig1.show()
-            print("✅ Site comparison chart saved as 'site_comparison.html'")
+            print("Site comparison chart saved as 'site_comparison.html'")
         
         # 2. Time series chart
         fig2 = self.create_time_series_chart(df)
         if fig2:
             fig2.write_html("energy_trends.html")
             fig2.show()
-            print("✅ Energy trends chart saved as 'energy_trends.html'")
+            print("Energy trends chart saved as 'energy_trends.html'")
         
         # 3. Performance heatmap
         fig3 = self.create_performance_heatmap(df)
         if fig3:
             fig3.write_html("performance_heatmap.html")
             fig3.show()
-            print("✅ Performance heatmap saved as 'performance_heatmap.html'")
+            print("Performance heatmap saved as 'performance_heatmap.html'")
         
-        print("\n🎉 All visualizations completed!")
-        print("📁 HTML files saved in your project directory")
-        print("🌐 Open the HTML files in your browser to view interactive charts")
+        print("\nAll visualizations completed!")
+        print("HTML files saved in your project directory")
+        print("Open the HTML files in your browser to view interactive charts")
 
 def main():
     """Main function to run the visualizer"""

@@ -312,7 +312,7 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    print("🚀 Starting Energy Data API...")
-    print("🌐 API will be available at: http://localhost:8000")
-    print("📖 Interactive docs at: http://localhost:8000/docs")
+    print("Starting Energy Data API...")
+    print("API will be available at: http://localhost:8000")
+    print("Interactive docs at: http://localhost:8000/docs")
     uvicorn.run(app, host="0.0.0.0", port=8000)

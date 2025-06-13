@@ -65,9 +65,9 @@ class PipelineErrorHandler:
             # Create log group if it doesn't exist
             try:
                 self.cloudwatch_logs.create_log_group(logGroupName=self.log_group_name)
-                print(f"✅ Created CloudWatch log group: {self.log_group_name}")
+                print(f"Created CloudWatch log group: {self.log_group_name}")
             except self.cloudwatch_logs.exceptions.ResourceAlreadyExistsException:
-                print(f"✅ CloudWatch log group already exists: {self.log_group_name}")
+                print(f"CloudWatch log group already exists: {self.log_group_name}")
             
             # Create log stream
             try:
@@ -75,12 +75,12 @@ class PipelineErrorHandler:
                     logGroupName=self.log_group_name,
                     logStreamName=self.log_stream_name
                 )
-                print(f"✅ Created log stream: {self.log_stream_name}")
+                print(f"Created log stream: {self.log_stream_name}")
             except self.cloudwatch_logs.exceptions.ResourceAlreadyExistsException:
-                print(f"✅ Log stream already exists: {self.log_stream_name}")
+                print(f"Log stream already exists: {self.log_stream_name}")
                 
         except Exception as e:
-            print(f"❌ Failed to setup CloudWatch logging: {e}")
+            print(f"Failed to setup CloudWatch logging: {e}")
     
     def log_error(self, 
                   error: Exception, 
@@ -122,15 +122,15 @@ class PipelineErrorHandler:
                     }
                 ]
             )
-            print(f"✅ Error logged to CloudWatch")
+            print(f"Error logged to CloudWatch")
         except Exception as e:
-            print(f"❌ Failed to log to CloudWatch: {e}")
+            print(f"Failed to log to CloudWatch: {e}")
         
         # Update error counters
         self.error_counts[severity] += 1
         
         # Print to console
-        print(f"🚨 {severity.value} ERROR in {component}: {str(error)}")
+        print(f"{severity.value} ERROR in {component}: {str(error)}")
         
         # Send alert for high severity errors
         if severity in [ErrorSeverity.HIGH, ErrorSeverity.CRITICAL]:
@@ -146,10 +146,10 @@ class PipelineErrorHandler:
             error_message = error_data['error_message']
             timestamp = error_data['timestamp']
             
-            subject = f"🚨 {severity} ERROR - Energy Pipeline"
+            subject = f" {severity} ERROR - Energy Pipeline"
             
             message = f"""
-🚨 HIGH SEVERITY ERROR DETECTED
+ HIGH SEVERITY ERROR DETECTED
 
 Component: {component}
 Severity: {severity}
@@ -185,15 +185,15 @@ Logs: CloudWatch > {self.log_group_name}
                         Subject=subject,
                         Message=message
                     )
-                    print(f"📧 Error alert sent via SNS")
+                    print(f"Error alert sent via SNS")
                 else:
-                    print(f"⚠️ No SNS topic found for alerts")
+                    print(f" No SNS topic found for alerts")
                 
             except Exception as e:
-                print(f"❌ Failed to send SNS alert: {e}")
+                print(f" Failed to send SNS alert: {e}")
                 
         except Exception as e:
-            print(f"❌ Failed to send error alert: {e}")
+            print(f" Failed to send error alert: {e}")
     
     def retry_operation(self, 
                        operation_func, 
@@ -219,7 +219,7 @@ Logs: CloudWatch > {self.log_group_name}
                 result = operation_func()
                 
                 if attempt > 0:
-                    print(f"✅ Operation succeeded on attempt {attempt + 1}")
+                    print(f" Operation succeeded on attempt {attempt + 1}")
                     
                 return result
                 
@@ -237,7 +237,7 @@ Logs: CloudWatch > {self.log_group_name}
                 else:
                     # Retry with backoff
                     wait_time = backoff_factor ** attempt
-                    print(f"⚠️ Attempt {attempt + 1} failed, retrying in {wait_time}s...")
+                    print(f" Attempt {attempt + 1} failed, retrying in {wait_time}s...")
                     
                     self.log_error(
                         error=e,
@@ -356,9 +356,9 @@ def enhanced_lambda_handler_with_error_handling(event, context):
                 # Continue processing other records
                 continue
         
-        print(f"✅ Processed {processed_count} records successfully")
+        print(f" Processed {processed_count} records successfully")
         if error_count > 0:
-            print(f"⚠️ {error_count} records failed processing")
+            print(f" {error_count} records failed processing")
         
         return {
             'statusCode': 200,
@@ -444,7 +444,7 @@ def process_energy_record_with_validation(record):
 
 def test_error_handling_system():
     """Test the error handling system"""
-    print("🧪 Testing Error Handling System...")
+    print(" Testing Error Handling System...")
     
     handler = PipelineErrorHandler()
     
@@ -476,16 +476,16 @@ def test_error_handling_system():
             context={"test": "retry_mechanism"},
             component="test_retry"
         )
-        print(f"✅ Retry test successful: {result}")
+        print(f" Retry test successful: {result}")
     except Exception as e:
-        print(f"❌ Retry test failed: {e}")
+        print(f" Retry test failed: {e}")
     
     # Test 3: Error statistics
-    print(f"📊 Error Statistics: {handler.error_counts}")
+    print(f" Error Statistics: {handler.error_counts}")
     
     return handler
 
 if __name__ == "__main__":
-    print("🚀 Starting Error Handling System Test...")
+    print(" Starting Error Handling System Test...")
     test_handler = test_error_handling_system()
-    print("✅ Error handling system test completed!")
+    print(" Error handling system test completed!")

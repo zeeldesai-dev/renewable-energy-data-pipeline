@@ -7,11 +7,11 @@ BUCKET_NAME = "zeel-energy-data-2025"
 
 def generate_energy_record(site_id):
     """Generate a single energy record"""
-    # Generate realistic energy data
-    generation = round(random.uniform(50, 200), 2)  # 50-200 kWh
-    consumption = round(random.uniform(30, 150), 2)  # 30-150 kWh
+    # Generate energy data
+    generation = round(random.uniform(50, 200), 2)  
+    consumption = round(random.uniform(30, 150), 2)  
     
-    # Occasionally add anomalies (5% chance)
+    # Add anomalies 
     if random.random() < 0.05:
         if random.random() < 0.5:
             generation = -random.uniform(1, 10)  # Negative generation
@@ -58,32 +58,32 @@ def upload_to_s3(records):
             ContentType='application/json'
         )
         
-        print(f"✅ SUCCESS! Uploaded {len(records)} records to:")
+        print(f"SUCCESS! Uploaded {len(records)} records to:")
         print(f"   s3://{BUCKET_NAME}/{filename}")
         return True
         
     except Exception as e:
-        print(f"❌ ERROR: {e}")
+        print(f"ERROR: {e}")
         return False
 
 def main():
-    print("🚀 Energy Data Generator Starting...")
-    print("📊 Generating test data...")
+    print("Energy Data Generator Starting...")
+    print("Generating test data...")
     
     # Generate test data
     records = generate_test_data()
     
-    print(f"📝 Generated {len(records)} records for 5 sites")
-    print("📤 Uploading to S3...")
+    print(f"Generated {len(records)} records for 5 sites")
+    print("Uploading to S3...")
     
     # Upload to S3
     success = upload_to_s3(records)
     
     if success:
-        print("🎉 Test completed successfully!")
-        print("🔍 Check your S3 bucket in AWS Console to see the file")
+        print("Test completed successfully!")
+        print("Check your S3 bucket in AWS Console to see the file")
     else:
-        print("❌ Test failed - check your AWS credentials")
+        print("Test failed - check your AWS credentials")
 
 if __name__ == "__main__":
     main()

@@ -42,8 +42,8 @@ def lambda_handler(event, context):
                 if processed_record.get('anomaly', False):
                     anomaly_count += 1
         
-        print(f"✅ Successfully processed {processed_count} records")
-        print(f"⚠️ Found {anomaly_count} anomalies")
+        print(f"Successfully processed {processed_count} records")
+        print(f"Found {anomaly_count} anomalies")
         
         return {
             'statusCode': 200,
@@ -55,7 +55,7 @@ def lambda_handler(event, context):
         }
         
     except Exception as e:
-        print(f"❌ Error processing file: {str(e)}")
+        print(f"Error processing file: {str(e)}")
         return {
             'statusCode': 500,
             'body': json.dumps({
@@ -104,7 +104,7 @@ def process_energy_record(record):
         return processed_record
         
     except Exception as e:
-        print(f"❌ Error processing record: {record}, Error: {str(e)}")
+        print(f"Error processing record: {record}, Error: {str(e)}")
         return None
 
 def store_in_dynamodb(record):
@@ -113,10 +113,10 @@ def store_in_dynamodb(record):
     """
     try:
         table.put_item(Item=record)
-        print(f"✅ Stored record: {record['site_id']} at {record['timestamp']}")
+        print(f"Stored record: {record['site_id']} at {record['timestamp']}")
         
     except Exception as e:
-        print(f"❌ Error storing record in DynamoDB: {str(e)}")
+        print(f"Error storing record in DynamoDB: {str(e)}")
         raise
 
 # For local testing
